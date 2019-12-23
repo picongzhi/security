@@ -1,11 +1,13 @@
 package com.pcz.security.dto;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import com.pcz.security.validator.MyConstraint;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.NotBlank;
 
+import javax.validation.constraints.Past;
 import java.util.Date;
 
 /**
@@ -13,9 +15,14 @@ import java.util.Date;
  */
 public class User {
     private String id;
+
+    @MyConstraint(message = "这是自定义validator")
     private String username;
-    @NotBlank
+
+    @NotBlank(message = "密码不能为空")
     private String password;
+
+    @Past(message = "生日必须是过去的时间")
     private Date birthday;
 
     @JsonView(UserSimpleView.class)

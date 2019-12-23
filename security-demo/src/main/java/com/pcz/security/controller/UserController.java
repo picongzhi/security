@@ -47,4 +47,15 @@ public class UserController {
 
         return user;
     }
+
+    @PutMapping("/{id:\\d}")
+    public User update(@PathVariable String id,
+                       @Valid @RequestBody User user,
+                       BindingResult errors) {
+        return user;
+    }
+
+    @DeleteMapping("/{id:\\d}")
+    public void delete(@PathVariable String id) {
+    }
 }
