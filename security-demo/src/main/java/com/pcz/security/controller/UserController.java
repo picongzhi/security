@@ -3,6 +3,7 @@ package com.pcz.security.controller;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.pcz.security.dto.User;
 import com.pcz.security.dto.UserQueryCondition;
+import com.pcz.security.exception.UserNotExistsException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.validation.BindingResult;
@@ -33,16 +34,17 @@ public class UserController {
     @JsonView(User.UserDetailView.class)
     @GetMapping(value = "/{id:\\d+}")
     public User getInfo(@PathVariable() String id) {
-        User user = new User();
-        user.setUsername("pcz");
-        user.setPassword("123456");
+//        User user = new User();
+//        user.setUsername("pcz");
+//        user.setPassword("123456");
+//
+//        return user;
 
-        return user;
+        throw new UserNotExistsException(id);
     }
 
     @PostMapping
-    public User create(@Valid @RequestBody User user,
-                       BindingResult errors) {
+    public User create(@Valid @RequestBody User user) {
         user.setId("1");
 
         return user;
