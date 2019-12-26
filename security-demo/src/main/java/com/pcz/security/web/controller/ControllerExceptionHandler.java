@@ -1,4 +1,4 @@
-package com.pcz.security.controller;
+package com.pcz.security.web.controller;
 
 import com.pcz.security.exception.UserNotExistsException;
 import org.springframework.http.HttpStatus;

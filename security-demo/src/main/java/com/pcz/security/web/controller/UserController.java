@@ -1,4 +1,4 @@
-package com.pcz.security.controller;
+package com.pcz.security.web.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.pcz.security.dto.User;
@@ -34,13 +34,13 @@ public class UserController {
     @JsonView(User.UserDetailView.class)
     @GetMapping(value = "/{id:\\d+}")
     public User getInfo(@PathVariable() String id) {
-//        User user = new User();
-//        user.setUsername("pcz");
-//        user.setPassword("123456");
-//
-//        return user;
+        User user = new User();
+        user.setUsername("pcz");
+        user.setPassword("123456");
 
-        throw new UserNotExistsException(id);
+        return user;
+
+//        throw new UserNotExistsException(id);
     }
 
     @PostMapping

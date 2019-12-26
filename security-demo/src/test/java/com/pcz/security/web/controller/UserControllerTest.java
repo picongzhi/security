@@ -1,4 +1,4 @@
-package com.pcz.security.controller;
+package com.pcz.security.web.controller;
 
 import org.junit.Before;
 import org.junit.Test;
