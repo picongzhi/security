@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonView;
 import com.pcz.security.dto.User;
 import com.pcz.security.dto.UserQueryCondition;
 import com.pcz.security.exception.UserNotExistsException;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.validation.BindingResult;
@@ -21,7 +23,8 @@ import java.util.List;
 public class UserController {
     @JsonView(User.UserSimpleView.class)
     @GetMapping()
-    public List<User> query(UserQueryCondition conditio,
+    @ApiOperation(value = "用户查询服务")
+    public List<User> query(UserQueryCondition condition,
                             @PageableDefault(page = 1, size = 20, sort = "username, asc") Pageable pageable) {
         List<User> userList = new ArrayList<>();
         userList.add(new User());
@@ -33,7 +36,7 @@ public class UserController {
 
     @JsonView(User.UserDetailView.class)
     @GetMapping(value = "/{id:\\d+}")
-    public User getInfo(@PathVariable() String id) {
+    public User getInfo(@ApiParam(value = "用户id", required = true) @PathVariable() String id) {
         User user = new User();
         user.setUsername("pcz");
         user.setPassword("123456");
