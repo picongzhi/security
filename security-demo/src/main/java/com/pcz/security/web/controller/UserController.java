@@ -8,6 +8,10 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -62,5 +66,16 @@ public class UserController {
 
     @DeleteMapping("/{id:\\d}")
     public void delete(@PathVariable String id) {
+    }
+
+//    @GetMapping("/me")
+//    public Object getCurrentUser(Authentication authentication) {
+////        return SecurityContextHolder.getContext().getAuthentication();
+//        return authentication;
+//    }
+
+    @GetMapping("/me")
+    public Object getCurrentUser(@AuthenticationPrincipal UserDetails userDetails) {
+        return userDetails;
     }
 }

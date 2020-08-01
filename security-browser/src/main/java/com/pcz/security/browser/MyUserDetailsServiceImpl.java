@@ -25,8 +25,9 @@ public class MyUserDetailsServiceImpl implements UserDetailsService {
 
 //        return new User(username, "123456",
 //                AuthorityUtils.commaSeparatedStringToAuthorityList("admin"));
-
-        return new User(username, passwordEncoder.encode("123456"),
+        String password = passwordEncoder.encode("123456");
+        log.info("数据库密码: " + password);
+        return new User(username, password,
                 true, true, true, true,
                 AuthorityUtils.commaSeparatedStringToAuthorityList("admin"));
     }
