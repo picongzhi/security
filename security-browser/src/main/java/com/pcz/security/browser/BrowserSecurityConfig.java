@@ -52,8 +52,7 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/code/image",
                         securityProperties.getBrowser().getLoginPage())
                 .permitAll()
-                .anyRequest()
-                .authenticated()
+                .anyRequest().authenticated()
                 .and()
                 .csrf().disable();
     }

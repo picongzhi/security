@@ -31,6 +31,7 @@ public class ValidateCodeController {
     public void createCode(HttpServletRequest request, HttpServletResponse response) throws IOException {
         ImageCode imageCode = createImageCode(request);
         logger.info("code: {}", imageCode.getCode());
+
         sessionStrategy.setAttribute(new ServletWebRequest(request), SESSION_KEY, imageCode);
         ImageIO.write(imageCode.getImage(), "JPEG", response.getOutputStream());
     }
@@ -57,7 +58,10 @@ public class ValidateCodeController {
         for (int i = 0; i < 4; i++) {
             String rand = String.valueOf(random.nextInt(10));
             sRand += rand;
-            graphics.setColor(new Color(20 + random.nextInt(110), 20 + random.nextInt(110), 20 + random.nextInt(110)));
+            graphics.setColor(new Color(
+                    20 + random.nextInt(110),
+                    20 + random.nextInt(110),
+                    20 + random.nextInt(110)));
             graphics.drawString(rand, 13 * i + 6, 16);
         }
 
