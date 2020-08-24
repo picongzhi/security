@@ -1,9 +1,8 @@
 package com.pcz.security.code;
 
-import com.pcz.security.core.validate.code.ImageCode;
+import com.pcz.security.core.validate.code.image.ImageCode;
 import com.pcz.security.core.validate.code.ValidateCodeGenerator;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.ServletWebRequest;
 
 @Slf4j

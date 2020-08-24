@@ -1,7 +1,11 @@
 package com.pcz.security.browser;
 
+import com.pcz.security.core.authentication.AbstractChannelSecurityConfig;
+import com.pcz.security.core.authentication.mobile.SmsCodeAuthenticationSecurityConfig;
+import com.pcz.security.core.properties.SecurityConstants;
 import com.pcz.security.core.properties.SecurityProperties;
 import com.pcz.security.core.validate.code.ValidateCodeFilter;
+import com.pcz.security.core.validate.code.ValidateCodeSecurityConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,21 +27,21 @@ import javax.sql.DataSource;
  * @author picongzhi
  */
 @Configuration
-public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
+public class BrowserSecurityConfig extends AbstractChannelSecurityConfig {
     @Autowired
     private SecurityProperties securityProperties;
-
-    @Autowired
-    private AuthenticationSuccessHandler defaultAuthenticationSuccessHandler;
-
-    @Autowired
-    private AuthenticationFailureHandler defaultAuthenticationFailureHandler;
 
     @Autowired
     private DataSource dataSource;
 
     @Autowired
     private UserDetailsService userDetailsService;
+
+    @Autowired
+    private ValidateCodeSecurityConfig validateCodeSecurityConfig;
+
+    @Autowired
+    private SmsCodeAuthenticationSecurityConfig smsCodeAuthenticationSecurityConfig;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -55,18 +59,11 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        ValidateCodeFilter validateCodeFilter = new ValidateCodeFilter();
-        validateCodeFilter.setAuthenticationFailureHandler(defaultAuthenticationFailureHandler);
-        validateCodeFilter.setSecurityProperties(securityProperties);
-        validateCodeFilter.afterPropertiesSet();
+        applyPasswordAuthenticationConfig(http);
 
-        http.addFilterBefore(validateCodeFilter, UsernamePasswordAuthenticationFilter.class)
-                .formLogin()
-//        http.httpBasic()
-                .loginPage("/authentication/require")
-                .loginProcessingUrl("/authentication/form")
-                .successHandler(defaultAuthenticationSuccessHandler)
-                .failureHandler(defaultAuthenticationFailureHandler)
+        http.apply(validateCodeSecurityConfig)
+                .and()
+                .apply(smsCodeAuthenticationSecurityConfig)
                 .and()
                 .rememberMe()
                 .tokenRepository(persistentTokenRepository())
@@ -75,8 +72,9 @@ public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers(
-                        "/authentication/require",
-                        "/code/image",
+                        SecurityConstants.DEFAULT_LOGIN_PROCESSING_URL_FORM,
+                        SecurityConstants.DEFAULT_LOGIN_PROCESSING_URL_MOBILE,
+                        SecurityConstants.DEFAULT_VALIDATE_CODE_URL_PREFIX + "/*",
                         securityProperties.getBrowser().getLoginPage())
                 .permitAll()
                 .anyRequest().authenticated()

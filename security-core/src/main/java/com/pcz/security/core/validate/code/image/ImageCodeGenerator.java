@@ -1,7 +1,9 @@
-package com.pcz.security.core.validate.code;
+package com.pcz.security.core.validate.code.image;
 
 import com.pcz.security.core.properties.SecurityProperties;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.pcz.security.core.validate.code.ValidateCode;
+import com.pcz.security.core.validate.code.ValidateCodeGenerator;
+import com.pcz.security.core.validate.code.image.ImageCode;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.context.request.ServletWebRequest;
 
@@ -20,7 +22,7 @@ public class ImageCodeGenerator implements ValidateCodeGenerator {
     }
 
     @Override
-    public ImageCode generate(ServletWebRequest request) {
+    public ValidateCode generate(ServletWebRequest request) {
         int width = ServletRequestUtils.getIntParameter(request.getRequest(), "width",
                 securityProperties.getCode().getImage().getWidth());
         int height = ServletRequestUtils.getIntParameter(request.getRequest(), "height",
